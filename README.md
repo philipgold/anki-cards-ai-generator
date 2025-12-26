@@ -33,7 +33,10 @@ The synchronization is very straightforward, and is described [here](https://doc
 ## Prerequisites
 1. This is an application that automates Anki cards creation process using the ChatGPT, DALLE and TTS models. Your [OpenAI API](https://platform.openai.com/api-keys) key is required. You can set environment variable OPENAI_API_KEY (.env is supported) or use --openai_api_key option.
    1. You can also choose to use cheaper models for image generation (e.g stable-diffusion) via Replicate. To use Replicate, the options --image_generation_mode, --replicate_api_key and --replicate_model_url must be set. You can also use environment variable REPLICATE_API_TOKEN.
+   - Use [API keys - OpenAI API](https://platform.openai.com/settings/organization/api-keys)
 2. [Anki](https://apps.ankiweb.net/) must be installed.
+   - Homebrew: `brew install --cask anki`
+     - Ankin Manual installation: [Install & Upgrade - Anki Manual](https://docs.ankiweb.net/platform/mac/installing.html)
 3. Add-on [AnkiConnect](https://ankiweb.net/shared/info/2055492159) is used for the import of the cards. It must be installed. AnkiConnect website contains short installation guide.
 4. Anki is running.
 5. Tool is compatible with python 3.10+
@@ -62,6 +65,8 @@ input_file processing_directory and processing directory can be relative or abso
 ### Default settings
 ```bash
 python -m generator.read-generate-import ./demo/input_words.csv ./processing
+
+python3 -m generator.read-generate-import ./demo/input_words.csv ./processing
 ```
 Defaults are:
 - Language is English

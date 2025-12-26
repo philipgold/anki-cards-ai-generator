@@ -161,3 +161,7 @@ cython_debug/
 /.github/
 /.idea/
 
+# API keys and sensitive files
+generator/mykey
+*.key
+
