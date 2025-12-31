@@ -1,0 +1,16 @@
+{
+    "word": "breakthrough",
+    "definition": "A significant and sudden advance or discovery, especially in science or technology.",
+    "context_sentences": [
+        "The research team achieved a major breakthrough in cancer treatment.",
+        "This new technology represents a breakthrough in renewable energy.",
+        "Her breakthrough discovery changed the way scientists view the disease."
+    ],
+    "notes": "Often used in scientific and technological contexts. Common collocations: 'make a breakthrough', 'achieve a breakthrough'. Similar to 'discovery' but implies a significant impact.",
+    "image_prompt": "A futuristic laboratory setting with advanced scientific equipment, where a group of scientists are gathered around a glowing, newly discovered element. The atmosphere is filled with excitement and awe, as the scientists examine the element that represents a major scientific breakthrough. The laboratory is filled with high-tech gadgets and screens displaying complex data, emphasizing the theme of innovation and discovery. No text in the image.",
+    "image_url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-gGUxacsdifaabNs20iW7wTOb/user-RRLXclZySXn5yKh5WPxRVobY/img-JOhu3OM81apLlMDe0BB1vFGI.png?st=2025-12-27T13%3A43%3A57Z&se=2025-12-27T15%3A43%3A57Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=32836cae-d25f-4fe9-827b-1c8c59c442cc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-12-27T11%3A15%3A00Z&ske=2025-12-28T11%3A15%3A00Z&sks=b&skv=2024-08-04&sig=QHhbG8IaWvyyUunxz0FrNmGR0zIuxDHuPl59x/MCX6c%3D",
+    "image_path": "processing_test/breakthrough.png",
+    "audio_path": "processing_test/breakthrough.mp3",
+    "dictionary_url": "https://dictionary.cambridge.org/dictionary/english/breakthrough",
+    "version": 2
+}

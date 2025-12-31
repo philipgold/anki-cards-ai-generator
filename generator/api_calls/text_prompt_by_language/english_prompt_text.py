@@ -1,74 +1,88 @@
 from generator.config import Config
 
-anki_prompt_preamble = """I want you to act like a professional Anki card maker, able to create Anki cards from the text I provide.
+anki_prompt_preamble = """You are an English vocabulary teacher creating flashcards for B2 level learners.
 
-With regard to formulating card content, you should follow two principles.
-1. Minimal Information: The learning material should be simple yet comprehensive, without skipping complex details.
-2. Optimized Wording: Ensure the card's wording allows quick understanding and response, aiming to reduce error rates and increase focus.
+IMPORTANT: Output ONLY valid JSON. No markdown, no explanations, just JSON.
 
+JSON Structure:
+{
+  "definition": "string",
+  "context_sentences": ["string", "string", "string"],
+  "notes": "string"
+}
 
-Context Handling:
-- Provide cards with or without context:
-  - No Context: If no context is given, use or create suitable contexts.
-  - With Context: Use the provided context. If the context distorts the word's conventional usage, it should be disregarded.
-- Do not mix context fields in the card and ensure the context is meaningful for the card content.
+B2 Level Guidelines:
+- Use everyday vocabulary that an upper-intermediate learner would understand
+- Avoid overly academic or technical terms in definitions
+- Keep definitions concise: 1-2 sentences maximum
+- Example sentences should be realistic and useful
 
-Input Format:
-- I can provide a word or a phrase with empty context: 
-  - WORD: [target word]; CONTEXT: []
-- Alternatively, I can provide a word or a phrase with a context:
-  - WORD: [target word]; CONTEXT: [context]
+DEFINITION:
+- Write a clear, practical definition
+- Use simple, common words
+- Focus on the most common meaning/usage
+- 1-2 sentences max
 
-Output Expectations:
-- Exclude unrelated sentences, as the "Card Example". 
-- You can not use the word from input in the output. All letters should be masked with underscores.
-- Each card should contain 4-5 sentences focused solely on explaining the masked word or phrase.
-- Your output should contain only the text for the card.
+CONTEXT_SENTENCES:
+- Provide exactly 3 example sentences
+- Show different contexts (work, personal, formal, informal)
+- Use natural, conversational language
+- Each sentence should demonstrate clear word usage
+- Keep sentences 10-15 words long
 
-Masking Rules:
-- Mask the target word with underscores, preserving spaces between words ("free will" becomes "____ ____").
-- Number of underscores should match the exact number of the letters ("salvation" becomes "_________", "stumble on something" becomes "_______ __ _________").
-- The word following "to" should be masked as usual, but "to" itself should not be masked ("to warrant" becomes "to _______").
-- Only mask the target word, not its contextual usage. For instance, "seizure" in "ship seizure" should only mask "seizure.
+NOTES:
+- Mention common collocations (e.g., "often used with...", "followed by...")
+- Warn about confusing similar words
+- Note formality level if relevant (formal/informal/neutral)
+- Mention British vs American differences if applicable
+- Keep notes brief and practical
 
 """
 
 
 def examples() -> str:
     examples_preamble = """
-    Here are some examples, in format 
-    WORD: [target word]; CONTEXT: [optional context]; RESULT: [what I expect to get as output]
-    """
+Examples:
 
-    anki_examples = {"struggle": ["", "Something that can only be accomplished with great effort is said to be a ________. "
-                                      "The verb form of ________ can be used for physical or mental effort. "
-                                      "But is also used for 'to be engaged in a fight' "
-                                      "Student may ________ with a difficult algebra problem. "],
-                     "jot down": ["", "To write quickly. "
-                                      "You might ___ ____ a friend's email address on the back of your grocery list. "
-                                      "It's a good word to use when you're writing a brief note, a phone number, or a list — especially when you're doing it in a hurry. "],
-                     "attitude": ["", "An ________ is somewhere between a belief, a stance, a mood, and a pose. "
-                                      "If you've got an ________ about something, it can be hard to change it because you think you're right. "
-                                      "A complex mental state involving beliefs and feelings and values and dispositions to act in certain ways."
-                                      "An ________ is a way of thinking that you can express just by standing a certain way. "
-                                      "For example, putting your hands on your hips and rolling your eyes expresses one kind of ________, while kneeling with your palms together expresses "
-                                      "a very different one."],
-                     "free will": ["", "Something that allows individuals to make choices independently is known as ____ ___. "
-                                       "Philosophers often debate whether ____ ___ truly exists or if our decisions are predetermined. "
-                                       "The concept of ____ ___ is central to discussions about moral responsibility."
-                                       "In religious contexts, ____ ___ is often linked to the ability to choose between good and evil."],
-                     "seizure": ["ship seizure", "Something that involves taking control of a ship by force is known as a ship ______."
-                                                 "In legal contexts, a ship ______ can occur due to violations of maritime law."
-                                                 "Pirates are historically known for committing ship ______."
-                                                 "Authorities may conduct a ship ______ to prevent illegal activities like smuggling."],
-                     "to stumble on something": ["", "To accidentally discover or encounter something unexpectedly is to _______ __ _________.",
-                                                     "You might _______ __ _________ while cleaning your attic and find an old photo album.",
-                                                     "Researchers sometimes _______ __ _________ that leads to significant scientific breakthroughs.",
-                                                     "The phrase can also mean to trip over an object, causing you to lose your balance."]
-                     }
+Input: WORD: [resilience]; CONTEXT: [psychology]
+Output:
+{
+  "definition": "The ability to recover quickly from difficulties or adapt to challenging situations.",
+  "context_sentences": [
+    "Her resilience helped her overcome the job loss and start a new career.",
+    "The company showed great resilience during the economic crisis.",
+    "Building resilience is important for mental health and well-being."
+  ],
+  "notes": "Often used in psychology and business contexts. Common phrase: 'build resilience'. Similar to 'toughness' but emphasizes recovery and adaptation."
+}
 
-    anki_examples_strings = [f"WORD: [{word}]; CONTEXT: [{anki_examples[word][0]}]; RESULT:[{anki_examples[word][1]}]\n" for word in anki_examples.keys()]
-    return examples_preamble + ''.join(anki_examples_strings)
+Input: WORD: [stumble upon]; CONTEXT: []
+Output:
+{
+  "definition": "To find or discover something by chance, without looking for it.",
+  "context_sentences": [
+    "I stumbled upon an amazing café while exploring the neighborhood.",
+    "She stumbled upon the solution while working on a different problem.",
+    "Have you ever stumbled upon an old photo and felt nostalgic?"
+  ],
+  "notes": "Phrasal verb. Informal/neutral tone. Always followed by a noun (stumble upon something). Similar to 'come across' or 'discover by accident'."
+}
+
+Input: WORD: [jot down]; CONTEXT: []
+Output:
+{
+  "definition": "To write something quickly, usually a short note or reminder.",
+  "context_sentences": [
+    "Let me jot down your phone number before I forget it.",
+    "She jotted down the main points during the meeting.",
+    "I always jot down ideas when they come to me."
+  ],
+  "notes": "Phrasal verb. Informal/neutral. Common in everyday speech. Similar to 'write down' but emphasizes speed and brevity. Often used with: ideas, notes, numbers, reminders."
+}
+
+Now process the input and return ONLY the JSON response.
+"""
+    return examples_preamble
 
 
 def rule_language_level() -> str:

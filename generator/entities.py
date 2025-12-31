@@ -40,6 +40,36 @@ class CardRawDataV1:
             raise ValueError("Paths cannot be empty")
 
 
+@dataclass(frozen=True)
+class CardRawDataV2:
+    """
+    Vocabulary card with structured definition and context.
+    Designed for Term/Definition/Context/Image/Audio format.
+    Optimized for B2 level English learning.
+    """
+    word: str
+    definition: str
+    context_sentences: list[str]
+    notes: str
+    image_prompt: str
+    image_url: str
+    image_path: str
+    audio_path: str
+    dictionary_url: str = None
+    version: int = 2
+
+    def __post_init__(self):
+        # Validate required fields
+        if not self.word or not self.definition:
+            raise ValueError("Word and definition are required")
+        if not self.context_sentences or len(self.context_sentences) < 2:
+            raise ValueError("At least 2 context sentences required")
+        if not self.image_path or not self.audio_path:
+            raise ValueError("Image and audio paths are required")
+        if not self.image_url:
+            raise ValueError("Image URL cannot be empty")
+
+
 def serialize_to_json(data):
     # Convert dataclass to dictionary
     data_dict = asdict(data)
@@ -59,6 +89,13 @@ def word_to_filename(word: WordWithContext) -> str:
 
 def cards_to_dict(cards: list[CardRawDataV1]) -> dict[WordWithContext, CardRawDataV1]:
     cards_dict: dict[WordWithContext, CardRawDataV1] = {}
+    for card in cards:
+        cards_dict[WordWithContext(card.word, "")] = card
+    return cards_dict
+
+
+def cards_to_dict_v2(cards: list[CardRawDataV2]) -> dict[WordWithContext, CardRawDataV2]:
+    cards_dict: dict[WordWithContext, CardRawDataV2] = {}
     for card in cards:
         cards_dict[WordWithContext(card.word, "")] = card
     return cards_dict

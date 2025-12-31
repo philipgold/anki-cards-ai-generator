@@ -1,0 +1,16 @@
+{
+    "word": "stumble upon",
+    "definition": "To find or discover something by chance, without looking for it.",
+    "context_sentences": [
+        "I stumbled upon an amazing caf\u00e9 while exploring the neighborhood.",
+        "She stumbled upon the solution while working on a different problem.",
+        "Have you ever stumbled upon an old photo and felt nostalgic?"
+    ],
+    "notes": "Phrasal verb. Informal/neutral tone. Always followed by a noun (stumble upon something). Similar to 'come across' or 'discover by accident'.",
+    "image_prompt": "A curious explorer walking through a dense, lush forest, unexpectedly coming across a hidden, ancient treasure chest partially buried under leaves and vines. The scene captures the surprise and wonder of discovering something unexpected in nature. The forest is vibrant and detailed, with sunlight filtering through the canopy, highlighting the moment of chance discovery. No text in the image.",
+    "image_url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-gGUxacsdifaabNs20iW7wTOb/user-RRLXclZySXn5yKh5WPxRVobY/img-ZEJvgVho7VlnKqPLiCjuQnfp.png?st=2025-12-27T13%3A43%3A16Z&se=2025-12-27T15%3A43%3A16Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=32836cae-d25f-4fe9-827b-1c8c59c442cc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-12-27T11%3A15%3A00Z&ske=2025-12-28T11%3A15%3A00Z&sks=b&skv=2024-08-04&sig=jorllqcsA4qriB7tELDK4w8jIMyptQRPg%2BwYQjsbkDw%3D",
+    "image_path": "processing_test/stumble_upon.png",
+    "audio_path": "processing_test/stumble_upon.mp3",
+    "dictionary_url": "https://dictionary.cambridge.org/dictionary/english/stumble-upon",
+    "version": 2
+}

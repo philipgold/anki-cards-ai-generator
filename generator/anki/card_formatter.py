@@ -2,125 +2,206 @@ import os
 
 from . import anki_operations
 from ..config import Config
-from ..entities import CardRawDataV1
+from ..entities import CardRawDataV2
 
 
-def get_front_html(card_data: CardRawDataV1) -> str:
-    formatted_text = card_data.card_text.replace('. ', '.<br>')
+def get_front_html(card_data: CardRawDataV2) -> str:
+    """
+    Front side: Display the term/word with audio button.
+    Simple, clean design focused on the vocabulary term.
+    """
     styles = """
     <style>
-    .card {
-        max-width: 90%; 
-        margin: auto; 
-        padding: 10px;
+    .card-front {
+        max-width: 90%;
+        margin: auto;
+        padding: 40px 20px;
+        text-align: center;
     }
-    .card-image {
-        max-width: 100%; 
-        max-height: 450px; 
-        height: auto; 
-        width: auto; 
-        border-radius: 10px;
+    .term {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 32px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 20px;
     }
-    
-    .card-text {
-        font-size: 18px;
-        text-align: justify;
-        line-height: 1.5;
-    }
-    
-    .hint {
-        font-family: Consolas;
-        font-size: 20px;
-        
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        margin-top: 50px; 
-        margin-bottom: 10px;
-    }
-    
-    .delimiter {
-        margin-top: 30px;
-        margin-bottom: 30px;
-        height: 3px;
-        border: none;
-        background-color: #ccc;
-        display: block;
-    }
-    
-    .dictionary-url {
-        color: gray; 
-        font-weight: bold;
-        text-decoration: underline; 
-    }
-    
     .audio-container {
-        text-align: right;
+        margin-top: 15px;
     }
     .audio-text {
-        color: gray;
-        font-weight: bold;
+        color: #7f8c8d;
+        font-size: 14px;
+        font-weight: 500;
+        margin-right: 8px;
     }
-    .audio-button {
-        margin-left: 5px;
-    }
-    
-</style>"""
+    </style>
+    """
+
     front_content = styles + f"""
-    <div class="card">
-        <!-- Image -->
-        <img class="card-image" src="{os.path.basename(card_data.image_path)}">
-        
-        <!-- Delimiter -->
-        <hr class="delimiter">   
-             
-        <!-- Text -->
-        <p class="card-text">{formatted_text}</p>
-        
-        <!-- Delimiter -->
-        <hr class="delimiter">
-        
-        <!-- Dictionary Link and Audio Button -->
-    """
-
-    # Prepare the container for dictionary link and audio
-    front_content += """
-    <div class='hint'>
-    """
-
-    # If there's a dictionary URL, add a link to it
-    if card_data.dictionary_url:
-        front_content += f"<a class='dictionary-url' href='{card_data.dictionary_url}' target='_blank'>Dictionary</a>"
-
-    # Add audio if it exists
-    if card_data.audio_path:
-        audio_text = f"<span class='audio-text'>Audio</span>"
-        audio_button = f"<span class='audio-button'>[sound:{os.path.basename(card_data.audio_path)}]</span>"
-        front_content += f"<div class='audio-container'>{audio_text}{audio_button}</div>"
-
-    # Close the container
-    front_content += "</div>"
-
-    front_content += """
+    <div class="card-front">
+        <div class="term">{card_data.word}</div>
+        <div class="audio-container">
+            <span class="audio-text">🔊 Pronunciation</span>
+            <span>[sound:{os.path.basename(card_data.audio_path)}]</span>
+        </div>
     </div>
     """
     return front_content
 
 
-def get_back_html(card_data: CardRawDataV1) -> str:
-    return f"""
-    <div style='font-family: Verdana, sans-serif; font-size: 20px; text-align: center; margin-bottom: 20px;'>
-        {card_data.word}
-    </div>
+def get_back_html(card_data: CardRawDataV2) -> str:
+    """
+    Back side: Show definition, context sentences, notes, and image.
+    Modern, readable design optimized for B2 level learning.
+    """
+    styles = """
+    <style>
+    .card-back {
+        max-width: 90%;
+        margin: auto;
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .definition-section {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-left: 4px solid #3498db;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+    .definition-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #7f8c8d;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    .definition-text {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #2c3e50;
+    }
+    .context-section {
+        margin-bottom: 20px;
+    }
+    .context-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #7f8c8d;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .context-sentence {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #34495e;
+        margin-bottom: 10px;
+        padding-left: 15px;
+        border-left: 2px solid #e0e0e0;
+    }
+    .notes-section {
+        background-color: #fff9e6;
+        padding: 12px 15px;
+        border-left: 4px solid #f39c12;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+    .notes-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #d68910;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+    .notes-text {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #7d6608;
+    }
+    .image-section {
+        text-align: center;
+        margin-top: 25px;
+    }
+    .card-image {
+        max-width: 100%;
+        max-height: 300px;
+        height: auto;
+        width: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .footer {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #e0e0e0;
+        text-align: center;
+    }
+    .dictionary-link {
+        color: #3498db;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .dictionary-link:hover {
+        text-decoration: underline;
+    }
+    </style>
     """
 
+    # Build context sentences HTML
+    context_html = ""
+    for sentence in card_data.context_sentences:
+        context_html += f'<div class="context-sentence">• {sentence}</div>\n'
 
-def format(card_data: CardRawDataV1, deck_name: str):
-    # Ensure sentences end with a new line in HTML and handle text styling
+    back_content = styles + f"""
+    <div class="card-back">
+        <!-- Definition -->
+        <div class="definition-section">
+            <div class="definition-label">Definition</div>
+            <div class="definition-text">{card_data.definition}</div>
+        </div>
+
+        <!-- Context Sentences -->
+        <div class="context-section">
+            <div class="context-label">Examples</div>
+            {context_html}
+        </div>
+
+        <!-- Notes -->
+        <div class="notes-section">
+            <div class="notes-label">💡 Notes</div>
+            <div class="notes-text">{card_data.notes}</div>
+        </div>
+
+        <!-- Image -->
+        <div class="image-section">
+            <img class="card-image" src="{os.path.basename(card_data.image_path)}">
+        </div>
+    """
+
+    # Add dictionary link if available
+    if card_data.dictionary_url:
+        back_content += f"""
+        <div class="footer">
+            <a class="dictionary-link" href="{card_data.dictionary_url}" target="_blank">📖 View in Dictionary</a>
+        </div>
+        """
+
+    back_content += """
+    </div>
+    """
+    return back_content
+
+
+def format(card_data: CardRawDataV2, deck_name: str):
+    """
+    Format card data for Anki import using v2 structure.
+    Front: Term with audio
+    Back: Definition, examples, notes, and image
+    """
     front_content = get_front_html(card_data)
     back_content = get_back_html(card_data)
 
-    # Construct the note dictionary with HTML content
     return {
         "deckName": deck_name,
         "modelName": Config.CARD_MODEL,
@@ -132,5 +213,5 @@ def format(card_data: CardRawDataV1, deck_name: str):
             "allowDuplicate": True,
             "duplicateScope": "deck"
         },
-        "tags": [anki_operations.word_to_tag(card_data.word), "ai-generated"]
+        "tags": [anki_operations.word_to_tag(card_data.word), "ai-generated", "v2"]
     }

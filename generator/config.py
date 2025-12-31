@@ -64,7 +64,7 @@ class Config:
     @classmethod
     def set_anki_deck_name_or_use_default(cls, deck_name: str):
         if deck_name is None:
-            cls.DECK_NAME = "ai-generated-cards_" + datetime.datetime.now().strftime("%Y-%m-%d")
+            cls.DECK_NAME = "English-Vocabulary"
         else:
             cls.DECK_NAME = deck_name
         logging.info(f"Using anki deck name: {cls.DECK_NAME}")

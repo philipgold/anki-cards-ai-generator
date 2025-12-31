@@ -7,10 +7,10 @@ import requests
 
 from generator.config import Config
 
-from generator.entities import CardRawDataV1, WordWithContext, word_to_filename
+from generator.entities import CardRawDataV1, CardRawDataV2, WordWithContext, word_to_filename
 
 
-def cards_in_directory(processing_directory: str) -> list[CardRawDataV1]:
+def cards_in_directory(processing_directory: str) -> list[CardRawDataV2]:
     return read_json_files_as_objects(processing_directory)
 
 
@@ -19,12 +19,25 @@ def list_json_files(directory):
 
 
 def read_json_files_as_objects(directory):
+    """
+    Read JSON files and deserialize to CardRawDataV2 objects.
+    Automatically detects version field and uses appropriate dataclass.
+    """
     files = list_json_files(directory)
     objects = []
     for file_path in files:
         with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
-            obj = CardRawDataV1(**data)
+            # Check version field to determine which dataclass to use
+            version = data.get('version', 1)
+            if version == 2:
+                obj = CardRawDataV2(**data)
+            else:
+                # For v1 or unversioned files, try to convert to v2 format
+                logging.warning(f"Found v1 card in {file_path}. Consider regenerating with v2 format.")
+                obj = CardRawDataV1(**data)
+                # Skip v1 cards for now (could add migration logic here)
+                continue
             objects.append(obj)
     return objects
 
