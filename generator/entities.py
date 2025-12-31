@@ -41,6 +41,13 @@ class CardRawDataV1:
 
 
 @dataclass(frozen=True)
+class ClozeSentence:
+    """A cloze deletion sentence with the word blanked out and a Russian hint."""
+    sentence: str  # e.g., "She {{c1::agreed}} to help us with the project."
+    hint: str      # e.g., "согласилась"
+
+
+@dataclass(frozen=True)
 class CardRawDataV2:
     """
     Vocabulary card with structured definition and context.
@@ -57,6 +64,7 @@ class CardRawDataV2:
     image_path: str
     audio_path: str
     russian_speaker_tips: str = None
+    cloze_sentences: list[ClozeSentence] = None
     dictionary_url: str = None
     version: int = 2
 

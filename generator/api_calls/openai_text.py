@@ -96,6 +96,19 @@ def chat_generate_structured_text(word_with_context: WordWithContext) -> dict:
         if "russian_speaker_tips" not in structured_data:
             structured_data["russian_speaker_tips"] = None
 
+        # Handle cloze_sentences if present (optional field)
+        if "cloze_sentences" in structured_data:
+            if not isinstance(structured_data["cloze_sentences"], list):
+                raise ValueError("cloze_sentences must be a list")
+            # Validate each cloze sentence has required fields
+            for i, cloze in enumerate(structured_data["cloze_sentences"]):
+                if not isinstance(cloze, dict):
+                    raise ValueError(f"cloze_sentences[{i}] must be an object")
+                if "sentence" not in cloze or "hint" not in cloze:
+                    raise ValueError(f"cloze_sentences[{i}] must have 'sentence' and 'hint' fields")
+        else:
+            structured_data["cloze_sentences"] = None
+
         logging.info(f"Successfully generated structured card for word [{word_with_context.word}]")
         return structured_data
 

@@ -18,6 +18,14 @@ C2 = "C2"
 OPENAI = "openai"
 REPLICATE = "replicate"
 
+# Card direction options
+RECOGNITION = "recognition"  # English → Russian (default)
+PRODUCTION = "production"    # Russian → English
+BOTH = "both"                # Generate both card types
+
+# Cloze card option
+INCLUDE_CLOZE = False        # Generate cloze deletion cards
+
 
 class Config:
     OPENAI_API_KEY: str = None
@@ -46,6 +54,13 @@ class Config:
 
     REPLICATE_API_KEY: str = None
     REPLICATE_MODEL_URL: str = None
+
+    SUPPORTED_CARD_DIRECTIONS: list[str] = [RECOGNITION, PRODUCTION, BOTH]
+    DEFAULT_CARD_DIRECTION: str = RECOGNITION
+    CARD_DIRECTION: str = None
+
+    INCLUDE_CLOZE: bool = False
+    CLOZE_MODEL: str = "Cloze"
 
 
     @classmethod
@@ -120,6 +135,21 @@ class Config:
             logging.warning(f"Usage of custom card model: [{cls.CARD_MODEL}]")
         logging.info(f"Used card model: [{cls.CARD_MODEL}]")
 
+    @classmethod
+    def set_card_direction_or_use_default(cls, card_direction: str):
+        if card_direction is None:
+            cls.CARD_DIRECTION = cls.DEFAULT_CARD_DIRECTION
+        elif card_direction.lower() in cls.SUPPORTED_CARD_DIRECTIONS:
+            cls.CARD_DIRECTION = card_direction.lower()
+        else:
+            raise Exception(f"Card direction [{card_direction}] not supported. Supported directions: {cls.SUPPORTED_CARD_DIRECTIONS}")
+        logging.info(f"Card direction set to [{cls.CARD_DIRECTION}]")
+
+    @classmethod
+    def set_include_cloze(cls, include_cloze: bool):
+        cls.INCLUDE_CLOZE = include_cloze
+        if cls.INCLUDE_CLOZE:
+            logging.info("Cloze card generation enabled")
 
     @classmethod
     def setup_openai_api_key_from_environment(cls):

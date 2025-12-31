@@ -6,6 +6,8 @@ from generator.config import Config, ENGLISH, GERMAN
 
 def get_system_prompt_by_language():
     if Config.LANGUAGE == ENGLISH:
+        if Config.INCLUDE_CLOZE:
+            return english_prompt_text.get_prompt_with_cloze()
         return english_prompt_text.get_prompt()
     elif Config.LANGUAGE == GERMAN:
         return german_prompt_text.get_prompt()

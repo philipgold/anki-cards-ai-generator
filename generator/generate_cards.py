@@ -4,7 +4,7 @@ import time
 from generator.api_calls import openai_image, openai_text, openai_audio, openai_image_prompt, replicate_image
 from generator.dictionaries import dictionaries
 from generator.config import Config, OPENAI, REPLICATE
-from generator.entities import WordWithContext, CardRawDataV1, CardRawDataV2, serialize_to_json
+from generator.entities import WordWithContext, CardRawDataV1, CardRawDataV2, ClozeSentence, serialize_to_json
 from generator.input.file_operations import save_text, generate_image_path, generate_card_data_path, download_and_save_image, generate_audio_path
 from generator.input.confirm import confirm_action
 
@@ -102,6 +102,14 @@ def create_card_for_word_v2(word_with_context: WordWithContext) -> CardRawDataV2
     else:
         logging.warning(f"Dictionary url is not created")
 
+    # Parse cloze sentences if present
+    cloze_sentences = None
+    if structured_content.get("cloze_sentences"):
+        cloze_sentences = [
+            ClozeSentence(sentence=c["sentence"], hint=c["hint"])
+            for c in structured_content["cloze_sentences"]
+        ]
+
     # Create CardRawDataV2 object
     card_raw: CardRawDataV2 = CardRawDataV2(
         word=word_with_context.word,
@@ -114,6 +122,7 @@ def create_card_for_word_v2(word_with_context: WordWithContext) -> CardRawDataV2
         image_path=image_path,
         audio_path=audio_path,
         russian_speaker_tips=structured_content.get("russian_speaker_tips"),
+        cloze_sentences=cloze_sentences,
         dictionary_url=dictionary_url
     )
 

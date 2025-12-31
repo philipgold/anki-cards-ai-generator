@@ -60,6 +60,8 @@ def main():
     parser.add_argument('--image_generation_mode', type=str, help="Use alternative image generation mode (e.g to use a cheaper model with Replicate)", default=Config.DEFAULT_IMAGE_GENERATION_MODE, choices=Config.SUPPORTED_IMAGE_GENERATION_MODES)
     parser.add_argument('--replicate_api_key', type=str, help="API key for Replicate. If not set, the value from environment variable REPLICATE_API_TOKEN is used", default=None)
     parser.add_argument('--replicate_model_url', type=str, help="URL of Replicate model, which will be used to generate an image", default=None)
+    parser.add_argument('--card_direction', type=str, help="Card type: 'recognition' (English→Russian), 'production' (Russian→English), or 'both'", default=Config.DEFAULT_CARD_DIRECTION, choices=Config.SUPPORTED_CARD_DIRECTIONS)
+    parser.add_argument('--include_cloze', action='store_true', help="Generate cloze deletion cards for practicing collocations and prepositions")
 
     # Parse arguments
     args = parser.parse_args()
@@ -75,6 +77,8 @@ def main():
     Config.set_language_or_use_default(args.language)
     Config.set_level_or_use_default(args.level)
     Config.set_card_model_or_use_default(args.card_model)
+    Config.set_card_direction_or_use_default(args.card_direction)
+    Config.set_include_cloze(args.include_cloze)
 
     # validate environment and read inputs
     validation.check_anki_connect()
