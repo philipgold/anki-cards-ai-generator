@@ -106,12 +106,14 @@ def create_card_for_word_v2(word_with_context: WordWithContext) -> CardRawDataV2
     card_raw: CardRawDataV2 = CardRawDataV2(
         word=word_with_context.word,
         definition=structured_content["definition"],
+        russian_translation=structured_content["russian_translation"],
         context_sentences=structured_content["context_sentences"],
         notes=structured_content["notes"],
         image_prompt=image_prompt,
         image_url=image_url,
         image_path=image_path,
         audio_path=audio_path,
+        russian_speaker_tips=structured_content.get("russian_speaker_tips"),
         dictionary_url=dictionary_url
     )
 

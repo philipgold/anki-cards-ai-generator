@@ -45,16 +45,18 @@ class CardRawDataV2:
     """
     Vocabulary card with structured definition and context.
     Designed for Term/Definition/Context/Image/Audio format.
-    Optimized for B2 level English learning.
+    Optimized for Russian speakers learning English.
     """
     word: str
     definition: str
+    russian_translation: str
     context_sentences: list[str]
     notes: str
     image_prompt: str
     image_url: str
     image_path: str
     audio_path: str
+    russian_speaker_tips: str = None
     dictionary_url: str = None
     version: int = 2
 
@@ -62,6 +64,8 @@ class CardRawDataV2:
         # Validate required fields
         if not self.word or not self.definition:
             raise ValueError("Word and definition are required")
+        if not self.russian_translation:
+            raise ValueError("Russian translation is required")
         if not self.context_sentences or len(self.context_sentences) < 2:
             raise ValueError("At least 2 context sentences required")
         if not self.image_path or not self.audio_path:

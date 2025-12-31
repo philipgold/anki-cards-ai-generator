@@ -81,7 +81,7 @@ def chat_generate_structured_text(word_with_context: WordWithContext) -> dict:
         structured_data = json.loads(generated_text)
 
         # Validate required fields
-        required_fields = ["definition", "context_sentences", "notes"]
+        required_fields = ["definition", "russian_translation", "context_sentences", "notes"]
         for field in required_fields:
             if field not in structured_data:
                 raise ValueError(f"Missing required field: {field}")
@@ -91,6 +91,10 @@ def chat_generate_structured_text(word_with_context: WordWithContext) -> dict:
 
         if len(structured_data["context_sentences"]) < 2:
             raise ValueError("At least 2 context sentences required")
+
+        # Ensure russian_speaker_tips exists (can be null)
+        if "russian_speaker_tips" not in structured_data:
+            structured_data["russian_speaker_tips"] = None
 
         logging.info(f"Successfully generated structured card for word [{word_with_context.word}]")
         return structured_data

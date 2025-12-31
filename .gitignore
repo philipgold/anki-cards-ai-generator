@@ -158,10 +158,18 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 /processing/
+/processing_*/
 /.github/
 /.idea/
 
 # API keys and sensitive files
 generator/mykey
 *.key
+
+# Personal input files (keep only demo files)
+/*.csv
+/data/input_words.csv
+
+# Test files
+test_*.csv
 
